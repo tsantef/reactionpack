@@ -1,0 +1,23 @@
+{
+  "name": "todomvc-reactionpack",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Tim Santeford <tsantef@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject",
+    "test": "react-scripts test"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "todomvc-app-css": "^2.0.6"
+  },
+  "devDependencies": {
+    "react-scripts": "^0.8.5"
+  }
+}
