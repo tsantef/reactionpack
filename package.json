@@ -1,0 +1,40 @@
+{
+  "name": "reactionpack",
+  "version": "0.0.0",
+  "description": "ReactionPack",
+  "author": "Tim Santeford <tsantef@gmail.com>",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "files": [],
+  "scripts": {
+    "build": "BABEL_ENV=commonjs babel src --out-dir lib --ignore \"**/*.spec.js\"",
+    "test": "jest",
+    "watch": "jest --watch --versbose",
+    "cover": "jest --coverage",
+    "lint": "eslint src --quiet",
+    "lint-fix": "eslint src --fix"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "babel-jest": "^18.0.0",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-react": "^6.22.0",
+    "babel-preset-stage-2": "^6.22.0",
+    "eslint": "^3.15.0",
+    "eslint-config-appnexus": "^1.6.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-lodash": "^2.3.5",
+    "eslint-plugin-promise": "^3.4.1",
+    "eslint-plugin-react": "^6.9.0",
+    "jest": "^18.1.0",
+    "react": "^15.4.2",
+    "react-test-renderer": "^15.4.2"
+  },
+  "jest": {
+    "transform": {
+      ".*": "<rootDir>/node_modules/babel-jest"
+    }
+  }
+}

@@ -1,0 +1,5 @@
+exports[`Computed #createComputed should throw error if missing a selector or computed function 1`] = `"Missing both a selector and compute function"`;
+
+exports[`Computed #createComputed should throw error if missing a selector or computed function 2`] = `"Missing both a selector and compute function"`;
+
+exports[`Computed #createComputed should throw error if missing a selector or computed function 3`] = `"Missing both a selector and compute function"`;

@@ -1,0 +1,99 @@
+exports[`Functional composed 1`] = `
+<div
+  id="App"
+  onClick={[Function]}>
+  <div
+    id="Page"
+    onClick={[Function]}>
+    <span>
+      vote:1
+    </span>
+  </div>
+  <span>
+    searchText:defaultSearchText
+  </span>
+  <span>
+    testComputed:defaultSearchText-computed
+  </span>
+</div>
+`;
+
+exports[`Functional composed 2`] = `
+<div
+  id="App"
+  onClick={[Function]}>
+  <div
+    id="Page"
+    onClick={[Function]}>
+    <span>
+      vote:1
+    </span>
+  </div>
+  <span>
+    searchText:test
+  </span>
+  <span>
+    testComputed:test-computed
+  </span>
+</div>
+`;
+
+exports[`Functional composed 3`] = `
+<div
+  id="App"
+  onClick={[Function]}>
+  <div
+    id="Page"
+    onClick={[Function]}>
+    <span>
+      vote:2
+    </span>
+  </div>
+  <span>
+    searchText:test
+  </span>
+  <span>
+    testComputed:test-computed
+  </span>
+</div>
+`;
+
+exports[`Functional composed 4`] = `
+<div
+  id="App"
+  onClick={[Function]}>
+  <div
+    id="Page"
+    onClick={[Function]}>
+    <span>
+      vote:2
+    </span>
+  </div>
+  <span>
+    searchText:done
+  </span>
+  <span>
+    testComputed:done-computed
+  </span>
+</div>
+`;
+
+exports[`Functional composed 5`] = `
+<div
+  id="App"
+  onClick={[Function]}>
+  <div
+    id="Page"
+    onClick={[Function]}>
+    <span>
+      vote:2
+    </span>
+  </div>
+  <span>
+    searchText:vet
+  </span>
+  <span>
+    testComputed:vet-computed
+  </span>
+</div>
+`;
