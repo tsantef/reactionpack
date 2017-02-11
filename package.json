@@ -4,16 +4,28 @@
   "description": "ReactionPack",
   "author": "Tim Santeford <tsantef@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tsantef/reactionpack.git"
+  },
   "main": "lib/index.js",
-  "files": [],
+  "files": [
+    "lib"
+  ],
   "scripts": {
+    "clean": "rimraf lib coverage",
     "build": "BABEL_ENV=commonjs babel src --out-dir lib --ignore \"**/*.spec.js\"",
     "test": "jest",
     "watch": "jest --watch --versbose",
     "cover": "jest --coverage",
     "lint": "eslint src --quiet",
-    "lint-fix": "eslint src --fix"
+    "lint-fix": "eslint src --fix",
+    "prepublish": "npm run clean && && npm run test && npm run test && npm run build"
   },
+  "pre-push": [
+    "lint",
+    "test"
+  ],
   "dependencies": {
     "lodash": "^4.17.4"
   },
@@ -29,8 +41,10 @@
     "eslint-plugin-promise": "^3.4.1",
     "eslint-plugin-react": "^6.9.0",
     "jest": "^18.1.0",
+    "pre-push": "^0.1.1",
     "react": "^15.4.2",
-    "react-test-renderer": "^15.4.2"
+    "react-test-renderer": "^15.4.2",
+    "rimraf": "^2.5.4"
   },
   "jest": {
     "transform": {
