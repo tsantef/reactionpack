@@ -6,7 +6,13 @@ import 'todomvc-app-css/index.css';
 
 const AppContainer = createStateContainer(App);
 
+function onNextState(state, action) {
+	if (window.devToolsExtension) {
+		window.devToolsExtension.send({ type: action }, state);
+	}
+}
+
 render(
-	<AppContainer />,
+	<AppContainer onNextState={onNextState} />,
 	document.getElementById('root')
 );

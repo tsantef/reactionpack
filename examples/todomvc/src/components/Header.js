@@ -1,32 +1,63 @@
-import React, {
-	PropTypes,
-	Component
-} from 'react'
+import React from 'react';
 import { connectToProps } from '../../../../lib';
-import TodoTextInput from './TodoTextInput'
+
+import TodoTextInput from './TodoTextInput';
 
 import * as actions from './Header.actions';
 
-export default connectToProps(class Header extends Component {
-	static propTypes = {
-		addTodo: PropTypes.func.isRequired,
-		todos: PropTypes.array.isRequired,
-	}
+const H = React.createClass({
+	propTypes: {
+		newTodoText: React.PropTypes.string,
+		todos: React.PropTypes.array.isRequired,
+		onAddTodo: React.PropTypes.func.isRequired,
+		onTextChange: React.PropTypes.func.isRequired,
+	},
 
-	handleSave = text => {
-		if (text.length !== 0) {
-			this.props.addTodo(text)
-		}
-	}
-
-	render() {
+	render: function() {
+		const {
+			newTodoText,
+			onAddTodo,
+			onTextChange,
+		} = this.props;
 		return (
-			<header className="header">
+			<header className='header'>
 				<h1>todos</h1>
-				<TodoTextInput newTodo
-					onSave={this.handleSave}
-					placeholder="What needs to be done?" />
+				<TodoTextInput
+					newTodo
+					text={newTodoText}
+					onSave={onAddTodo}
+					onTextChange={onTextChange}
+					placeholder='What needs to be done?'
+				/>
 			</header>
-		)
-	}
-}, actions);
+		);
+	},
+});
+
+const Header = ({
+	newTodoText='',
+	onAddTodo,
+	onTextChange,
+}) => {
+	return (
+		<header className='header'>
+			<h1>todos</h1>
+			<TodoTextInput
+				newTodo
+				text={newTodoText}
+				onSave={onAddTodo}
+				onTextChange={onTextChange}
+				placeholder='What needs to be done?'
+			/>
+		</header>
+	);
+};
+
+Header.propTypes = {
+	newTodoText: React.PropTypes.string,
+	todos: React.PropTypes.array.isRequired,
+	onAddTodo: React.PropTypes.func.isRequired,
+	onTextChange: React.PropTypes.func.isRequired,
+};
+
+export default connectToProps(H, actions);

@@ -8,13 +8,26 @@ const TODO_FILTERS = {
 	[SHOW_COMPLETED]: (todo) => todo.completed,
 };
 
+function getTodos({todos}) {
+	return todos;
+}
+
+function getFilter({filter}) {
+	return filter;
+}
+
 export const completedCount = [
-	({todos}) => todos,
+	getTodos,
 	(todos) => _.filter(todos, { completed: true }).length,
 ];
 
+export const activeCount = [
+	getTodos,
+	(todos) => _.filter(todos, { completed: false }).length,
+];
+
 export const filteredTodos = [
-	({todos}) => todos,
-	({filter}) => filter,
+	getTodos,
+	getFilter,
 	(todos, filter) => _.filter(todos, TODO_FILTERS[filter]),
 ];
