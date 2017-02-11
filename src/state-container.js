@@ -19,7 +19,7 @@ export function createStateContainer(WrappedComponent) {
 			return this.state;
 		},
 
-		_setState(path, state) {
+		_setState(path, state, actionName) {
 			let newState;
 			if (!_.isUndefined(path)) {
 				newState = _.set({
@@ -35,6 +35,9 @@ export function createStateContainer(WrappedComponent) {
 				};
 			}
 			this.setState(newState);
+			if (this.props && this.props.onNextState) {
+				this.props.onNextState(newState, actionName);
+			}
 		},
 
 		render() {

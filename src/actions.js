@@ -3,12 +3,6 @@ import React from 'react';
 
 import { createComputed } from './computed';
 
-function scrubState(state, { __propKeys }) {
-	// const scubedState = _.omit(state, ...__propKeys);
-	// console.log('SCRUBED: ', {state, __propKeys, scubedState});
-	return state;
-}
-
 export function bindActions(_this, actions, nameSpace) {
 	const lastActionInstanceByName = {};
 	const boundActions =  _.mapValues(actions, (action, key) => {
@@ -54,12 +48,12 @@ export function bindActions(_this, actions, nameSpace) {
 					return newStateMaybe.then((newState) => {
 						if (lastActionInstanceByName[name] === funcState) {
 							lastActionInstanceByName[name] = null;
-							setState(scrubState(newState, _this.state));
+							setState(newState, key);
 						}
 						return null;
 					});
 				} else {
-					return setState(scrubState(newStateMaybe, _this.state));
+					return setState(newStateMaybe, key);
 				}
 			};
 		} else if (_.isPlainObject(action)) {

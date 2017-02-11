@@ -39,7 +39,7 @@ describe('Actions', () => {
 
 			boundActions.myAction(5);
 
-			expect(_this.context.setState).toHaveBeenCalledWith(undefined, { myState: 6 });
+			expect(_this.context.setState).toHaveBeenCalledWith(undefined, { myState: 6 }, 'myAction');
 
 		});
 
@@ -191,7 +191,7 @@ describe('Actions', () => {
 
 			boundActions.nest.myAction(5);
 
-			expect(_this.context.setState).toHaveBeenCalledWith('nest', { myState: 6 });
+			expect(_this.context.setState).toHaveBeenCalledWith('nest', { myState: 6 }, 'myAction');
 
 		});
 
