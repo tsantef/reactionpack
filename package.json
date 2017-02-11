@@ -20,7 +20,7 @@
     "cover": "jest --coverage",
     "lint": "eslint src --quiet",
     "lint-fix": "eslint src --fix",
-    "prepublish": "npm run clean && && npm run test && npm run test && npm run build"
+    "prepublish": "npm run clean && npm run test && npm run build"
   },
   "pre-push": [
     "lint",
