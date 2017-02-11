@@ -8,11 +8,8 @@ root = true
 indent_style = tab
 end_of_line = lf
 insert_final_newline = true
-
-[*.json]
-indent_style = space
 indent_size = 2
 
-[*.md]
+[*.{json,html,md,yml}]
 indent_style = space
-indent_size = 4
+indent_size = 2
