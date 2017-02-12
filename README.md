@@ -18,7 +18,7 @@ wip
 
 ReactionPack has computed value support built in. Inspired by [Reselect](https://github.com/reactjs/reselect), computed values can be defined using an array containing one or more value selector functions and a computation function.
 
-```
+```javascript
 export const computedDef = [
   selectorFunc,
   <more selector functions>,
@@ -31,8 +31,7 @@ export const computedDef = [
 (Excerpt taken from the [todomvc example app](https://github.com/tsantef/reactionpack/blob/master/examples/todomvc/src/components/MainSection.computed.js))
 
 ```javascript
-# Selector definitions
-
+// Selector definitions
 function getTodos(state) {
   return state.todos;
 }
@@ -41,7 +40,7 @@ function getFilter(state) {
   return state.filter;
 }
 
-# Exported computed value definition
+// Exported computed value definition
 export const filteredTodos = [
   getTodos,
   getFilter,
@@ -51,7 +50,28 @@ export const filteredTodos = [
 
 ## Use with React-Router
 
-wip
+```javascript
+// App.jsx
+...
+export default connectToProps(App, actions, computed);
+
+// ./pages/home.jsx / /pages/about.jsx
+export default connectToProps(Home, actions, computed);
+
+// Routes.jsx
+import { createStateContainer } from 'reactionpack';
+
+import App from './app';
+import Home from './pages/home';
+import About from './pages/about';
+
+const Routes = (
+  <Route path='/' component={createStateContainer(App)}>
+    <Route path='/home' component={Home} />
+    <Route path='/about' component={About} />
+  </Route>
+);
+```
 
 ## Redux DevTools Extension
 
