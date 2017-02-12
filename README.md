@@ -8,9 +8,60 @@ npm install reactionpack --save
 
 ## State Container
 
-wip
+`createStateContainer(Component)`
+
+### Arguments
+
+* Component
+
+### Returns
+
+* (Component) Return s new component that server as the app's root state container.
+
+```javascript
+import { createStateContainer } from 'reactionpack';
+
+const AppContainer = createStateContainer(App);
+```
+
+## Connected Components
+
+`connectToProps(Component, [actions, [computed]])`
+
+### Arguments
+
+* Component
+* [actions] (object) - key names map to properties
+* [computeds] (object) - key names map to properties
+
+### Returns
+
+* (Component) Returns a new component with actions and computeds bound to props.
+
+```javascript
+import { connectToProps } from 'reactionpack';
+
+const ConnectedPage = connectToProps(Page, actions, computeds);
+```
 
 ## Actions
+
+actionName(state, [value, ...]) {
+  return {
+    ...state
+    someValue: value
+  }
+}
+
+### Return Values
+
+Actions can return three kinds of values: A object represting the new state, a promise, or null.
+
+* (object): Container state will be replaced with returned object.
+* Promise: Container state will be updated with the resolved object.
+* `null`: No state change
+
+### Action Context
 
 wip
 
