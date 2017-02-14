@@ -8,6 +8,8 @@ const TODO_FILTERS = {
 	[SHOW_COMPLETED]: (todo) => todo.completed,
 };
 
+// Selectors
+
 function getTodos({todos}) {
 	return todos;
 }
@@ -15,6 +17,8 @@ function getTodos({todos}) {
 function getFilter({filter}) {
 	return filter;
 }
+
+// Composed Computed Values
 
 export const completedCount = [
 	getTodos,

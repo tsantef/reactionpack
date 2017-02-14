@@ -34,7 +34,7 @@ export function onSaveTodo(state, editTodo, text) {
 			...todo,
 			text: todo.id === editTodo.id ? text : todo.text,
 			editing: todo.id === editTodo.id ? false : todo.editing,
-			editText: todo.id === editTodo.id ? '' : todo.editText,
+			editText: todo.id === editTodo.id ? null : todo.editText,
 		})),
 	};
 }

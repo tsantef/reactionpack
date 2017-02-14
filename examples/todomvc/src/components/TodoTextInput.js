@@ -1,6 +1,10 @@
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 
+function getTargetValue(action) {
+	return (e) => action(e.target.value);
+}
+
 const TodoTextInput = ({
 	editing,
 	newTodo,
@@ -14,10 +18,6 @@ const TodoTextInput = ({
 		if (e.which === 13) {
 			onSave(text);
 		}
-	};
-
-	const handleChange = (e) => {
-		onTextChange(e.target.value);
 	};
 
 	const handleBlur = (e) => {
@@ -37,7 +37,7 @@ const TodoTextInput = ({
 			autoFocus='true'
 			value={text}
 			onBlur={handleBlur}
-			onChange={handleChange}
+			onChange={getTargetValue(onTextChange)}
 			onKeyDown={handleSubmit}
 		/>
 	);
