@@ -22,3 +22,24 @@ export function createComputed(args) {
 		return resultCache;
 	};
 }
+
+export function buildComputeds(computeds) {
+	return _.mapValues(computeds, (value, key) => {
+		if (_.isArray(value)) {
+			return createComputed(value);
+		} else {
+			return buildComputeds(value);
+		}
+	});
+}
+
+export function generateComputeds(computeds, props, nameSpace) {
+	const _props = nameSpace ? _.get(props, nameSpace, {}) : props;
+	return _.mapValues(computeds, (computed, key) => {
+		if (_.isFunction(computed)) {
+			return computed(_props);
+		} else {
+			return generateComputeds(computed, _props, key);
+		}
+	});
+}

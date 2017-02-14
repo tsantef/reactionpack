@@ -2,7 +2,8 @@ import _ from 'lodash';
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-const { createStateContainer } = require('./state-container');
+import { createStateContainer } from './state-container';
+import { connectToProps } from './connect';
 
 const {
 	func,
@@ -11,9 +12,6 @@ const {
 	string,
 } = React.PropTypes;
 
-const {
-	connectToProps,
-} = require('./actions');
 
 describe('Functional', () => {
 

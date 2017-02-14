@@ -3,6 +3,10 @@ import React from 'react';
 
 export function createStateContainer(WrappedComponent) {
 	return React.createClass({
+		propTypes: {
+			onNextState: React.PropTypes.func,
+		},
+
 		getChildContext() {
 			return {
 				getState: this._getState,
