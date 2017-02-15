@@ -10,6 +10,9 @@ function onNextState(state, action) {
 	if (window.devToolsExtension) {
 		window.devToolsExtension.send({ type: action }, state);
 	}
+
+	const stateContainer = document.getElementById('state');
+	stateContainer.textContent = JSON.stringify(state, null, 2);
 }
 
 render(

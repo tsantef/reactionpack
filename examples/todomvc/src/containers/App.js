@@ -4,7 +4,7 @@ import MainSection from '../components/MainSection';
 
 const App = ({ todos=[] }) => {
 	return (
-		<div>
+		<div className='todoapp'>
 			<Header todos={todos} />
 			<MainSection todos={todos} />
 		</div>
