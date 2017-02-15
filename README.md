@@ -44,14 +44,39 @@ import { connectToProps } from 'reactionpack';
 const ConnectedPage = connectToProps(Page, actions, computeds);
 ```
 
+### Props Override Rules
+
+Props are overrided in the following priority from highest to lowest.
+
+* prop passed in from owner component
+* computed value from bound computed function
+* action bound function
+* state value from state container (if defined in propTypes)
+* component default props
+
 ## Actions
 
+Actions are async out of the gate and can return with state changes or a promises.
+
+```javascript
+// Return state changes
 actionName(state, [value, ...]) {
   return {
     ...state
     someValue: value
   }
 }
+
+// Return promises
+actionName(state, [value, ...]) {
+  return fetchApiStuff(value).then((res) => {
+    return {
+      ...this.getState();
+      things: res.things;
+    }
+  })
+}
+```
 
 ### Return Values
 
