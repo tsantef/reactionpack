@@ -1,4 +1,10 @@
+import _ from 'lodash';
+import React from 'react';
+import renderer from 'react-test-renderer';
+
 import { bindActions } from './actions';
+import { connectToProps } from './connect';
+import { createStateContainer } from './state-container';
 
 describe('Actions', () => {
 
@@ -38,83 +44,93 @@ describe('Actions', () => {
 
 		describe('context', () => {
 
-			it('#getState', () => {
+			describe('#getState', () => {
 
-				const _this = {
-					state: {
-						__defaults: {},
-						__propTypeKeys: [],
-						__actionKeys: [],
-						__computedKeys: [],
-					},
-					context: {
-						getState: jest.fn(),
-						setState: jest.fn(),
-					},
-				};
+				it('should existing in action context', () => {
+					const _this = {
+						state: {
+							__defaults: {},
+							__propTypeKeys: [],
+							__actionKeys: [],
+							__computedKeys: [],
+						},
+						context: {
+							getState: jest.fn(),
+							setState: jest.fn(),
+						},
+					};
 
-				const boundActions = bindActions(_this, {
-					myAction: function(state, value) {
-						expect(this.getState).toBeDefined();
-					},
+					const boundActions = bindActions(_this, {
+						myAction: function(state, value) {
+							expect(this.getState).toBeDefined();
+						},
+					});
+
+					boundActions.myAction();
 				});
-
-				boundActions.myAction();
 
 			});
 
-			it('#getComputed', () => {
+			describe('#getComputed', () => {
 
-				const _this = {
-					context: {
-						getState: jest.fn(),
-						setState: jest.fn(),
-					},
-					state: {
-						__propTypeKeys: [],
-						__actionKeys: [],
-						__computedKeys: [],
-						__defaults: {
-							value1: 'd1',
+				it('should existing in action context', () => {
+					const _this = {
+						context: {
+							getState: jest.fn(),
+							setState: jest.fn(),
 						},
-						__computed: {
-							value1: 'c1',
+						state: {
+							__propTypeKeys: [],
+							__actionKeys: [],
+							__computedKeys: [],
+							__defaults: {
+								value1: 'd1',
+							},
+							__computed: {
+								value1: 'c1',
+							},
 						},
-					},
-				};
+					};
 
-				const boundActions = bindActions(_this, {
-					myAction: function(state, value) {
-						expect(this.getComputed).toBeDefined();
-						expect(this.getComputed()).toEqual({ value1: 'c1' });
-					},
+					const boundActions = bindActions(_this, {
+						myAction: function(state, value) {
+							expect(this.getComputed).toBeDefined();
+							expect(this.getComputed()).toEqual({ value1: 'c1' });
+						},
+					});
+
+					boundActions.myAction();
+
 				});
-
-				boundActions.myAction();
 
 			});
 
-			it('#getActions', () => {
+			describe('#getActions', () => {
 
-				const _this = {
-					state: {
-						__propTypeKeys: [],
-						__actionKeys: [],
-						__computedKeys: [],
-					},
-					context: {
-						getState: jest.fn(),
-						setState: jest.fn(),
-					},
-				};
+				it('should existing in action context', () => {
 
-				const boundActions = bindActions(_this, {
-					myAction: function(state, value) {
-						expect(this.getActions).toBeDefined();
-					},
+					const _this = {
+						state: {
+							__propTypeKeys: [],
+							__actionKeys: [],
+							__computedKeys: [],
+						},
+						context: {
+							getState: jest.fn(),
+							setState: jest.fn(),
+						},
+					};
+
+					const boundActions = bindActions(_this, {
+						myAction: function(state, value) {
+							expect(this.getActions).toBeDefined();
+							expect(this.getActions().myAction.name).toEqual('bound wrappedAction');
+						},
+					});
+
+					boundActions.myAction();
+
 				});
-
-				boundActions.myAction();
 
 			});
 
@@ -185,6 +201,213 @@ describe('Actions', () => {
 			boundActions.nest.myAction(5);
 
 			expect(_this.context.setState).toHaveBeenCalledWith('nest', { myState: 6 }, 'myAction');
+
+		});
+
+	});
+
+	describe('wrappedAction', () => {
+
+		it('should resolve return object', () => {
+
+			const actions = {
+				action1: () => {
+					return { prop1: 'action1' };
+				},
+			};
+
+			const Component = (props) => {
+				return (
+					<div {...props}></div>
+				);
+			};
+
+			Component.propTypes = {
+				prop1: React.PropTypes.string,
+			};
+
+			const BoundComponent = connectToProps(Component, actions);
+
+			const StateContainer = createStateContainer(BoundComponent);
+
+			const component = renderer.create(
+				<StateContainer></StateContainer>
+			);
+
+			let tree = component.toJSON();
+			let props = tree.props;
+
+			props.action1();
+
+			tree = component.toJSON();
+			props = tree.props;
+
+			expect(_.omit(props, 'action1')).toEqual({ prop1: 'action1' });
+
+		});
+
+		it('should allow null', () => {
+
+			const actions = {
+				action1: () => {
+					return null;
+				},
+			};
+
+			const Component = (props) => {
+				return (
+					<div {...props}></div>
+				);
+			};
+
+			Component.propTypes = {
+				prop1: React.PropTypes.string,
+			};
+
+			const BoundComponent = connectToProps(Component, actions);
+
+			const StateContainer = createStateContainer(BoundComponent);
+
+			const component = renderer.create(
+				<StateContainer></StateContainer>
+			);
+
+			let tree = component.toJSON();
+			let props = tree.props;
+
+			props.action1();
+
+			tree = component.toJSON();
+			props = tree.props;
+
+			expect(_.omit(props, 'action1')).toEqual({});
+
+		});
+
+		it('should reject invalid action', () => {
+
+			const actions = {
+				action1: 5,
+			};
+
+			const Component = (props) => {
+				return (
+					<div {...props}></div>
+				);
+			};
+
+			Component.propTypes = {
+				prop1: React.PropTypes.string,
+			};
+
+			const BoundComponent = connectToProps(Component, actions);
+
+			const StateContainer = createStateContainer(BoundComponent);
+
+			expect(() => {
+				renderer.create(
+					<StateContainer></StateContainer>
+				);
+			}).toThrowErrorMatchingSnapshot();
+
+		});
+
+		describe('promised state', () => {
+
+			it('should resolve promise state', () => {
+
+				const actions = {
+					action1: () => {
+						return Promise.resolve({ resolvedProp1: 'resolvedProp' });
+					},
+				};
+
+				const Component = (props) => {
+					return (
+						<div {...props}></div>
+					);
+				};
+
+				Component.propTypes = {
+					resolvedProp1: React.PropTypes.string,
+				};
+
+				const BoundComponent = connectToProps(Component, actions);
+
+				const StateContainer = createStateContainer(BoundComponent);
+
+				const component = renderer.create(
+					<StateContainer></StateContainer>
+				);
+
+				let tree = component.toJSON();
+				let props = tree.props;
+
+				return props.action1().then(() => {
+					tree = component.toJSON();
+					props = tree.props;
+					return expect(_.omit(props, 'action1')).toEqual({ resolvedProp1: 'resolvedProp' });
+				});
+
+			});
+
+			it('should resolve only last action call', () => {
+
+				function returnFirst() {
+					return new Promise((resolve) => {
+						setTimeout(() => {
+							resolve({ resolvedProp1: 1 });
+						}, 10);
+					});
+				}
+
+				function returnSecond() {
+					return new Promise((resolve) => {
+						setTimeout(() => {
+							resolve({ resolvedProp1: 2 });
+						}, 500);
+					});
+				}
+
+				const functionQueue = [returnFirst, returnSecond];
+
+				const actions = {
+					action1: () => {
+						return functionQueue.shift()();
+					},
+				};
+
+				const Component = (props) => {
+					return (
+						<div {...props}></div>
+					);
+				};
+
+				Component.propTypes = {
+					resolvedProp1: React.PropTypes.number,
+				};
+
+				const BoundComponent = connectToProps(Component, actions);
+
+				const StateContainer = createStateContainer(BoundComponent);
+
+				const component = renderer.create(
+					<StateContainer></StateContainer>
+				);
+
+				let tree = component.toJSON();
+				let props = tree.props;
+
+				return Promise.all([
+					props.action1(),
+					props.action1(),
+				]).then(() => {
+					tree = component.toJSON();
+					props = tree.props;
+					return expect(_.omit(props, 'action1')).toEqual({ resolvedProp1: 2 });
+				});
+
+			});
 
 		});
 

@@ -50,6 +50,9 @@
   "jest": {
     "transform": {
       ".*": "<rootDir>/node_modules/babel-jest"
-    }
+    },
+    "testPathIgnorePatterns": [
+      "example"
+    ]
   }
 }

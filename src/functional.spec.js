@@ -12,7 +12,6 @@ const {
 	string,
 } = React.PropTypes;
 
-
 describe('Functional', () => {
 
 	it('Should overide props with computeds and actions', () => {

@@ -13,7 +13,7 @@ function composeState({ propTypeKeys, defaults, containerState, boundComputeds, 
 		__stateKeys,
 		__computed: null,
 	};
-	if (boundComputeds) {
+	if (Object.keys(boundComputeds).length > 0) {
 		const passThroughProps = _.pick(props, propTypeKeys);
 		const stateToProps = _.pick(containerState, __stateKeys);
 		composedState.__computed = generateComputeds(boundComputeds, {

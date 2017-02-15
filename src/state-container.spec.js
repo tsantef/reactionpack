@@ -1,111 +1,47 @@
-jest.mock('react');
+import React from 'react';
+import renderer from 'react-test-renderer';
+import { connectToProps } from './connect';
+import { createStateContainer } from './state-container';
 
-const React = require('react');
-const { createStateContainer } = require('./state-container');
+describe('Container', () => {
 
-describe('State Container', () => {
+	describe('#onNextState', () => {
 
-	beforeEach(function() {
-		React.createClass.mockReset();
-		React.createElement.mockReset();
-	});
+		it('should call onNextState prop', () => {
 
-	describe('#createStateContainer', () => {
+			const onNextState = jest.fn();
 
-		it('root state _setState', () => {
-
-			createStateContainer('SomeComponent');
-
-			expect(React.createClass).toHaveBeenCalledTimes(1);
-
-			const reactClass = React.createClass.mock.calls[0][0];
-			reactClass.setState = jest.fn();
-
-			const state = { myState: 4 };
-
-			expect(reactClass._setState).toBeDefined();
-
-			reactClass._setState(undefined, state);
-
-			expect(reactClass.setState).toHaveBeenCalledWith(state);
-
-		});
-
-		it('root state render', () => {
-
-			createStateContainer('SomeComponent');
-
-			expect(React.createClass).toHaveBeenCalledTimes(1);
-
-			const reactClass = React.createClass.mock.calls[0][0];
-			reactClass.state = {
-				existing: 5,
-				nested: {
-					existing: 6,
+			const actions = {
+				changeMyState: (state) => {
+					return { prop1: 'hi' };
 				},
 			};
-			reactClass.setState = function(state) {
-				this.state = state;
-			};
-			reactClass.createElement = jest.fn();
 
-			expect(reactClass.render).toBeDefined();
-
-			const state = { myState: 4 };
-
-			reactClass._setState(undefined, state);
-			reactClass.render();
-
-			expect(React.createElement).toHaveBeenCalledWith('SomeComponent', { existing: 5, myState: 4, nested: { existing: 6 } });
-
-		});
-
-		it('nested state _setState', () => {
-
-			createStateContainer('SomeComponent');
-
-			expect(React.createClass).toHaveBeenCalledTimes(1);
-
-			const reactClass = React.createClass.mock.calls[0][0];
-			reactClass.setState = jest.fn();
-
-			const state = { myState: 4 };
-
-			expect(reactClass._setState).toBeDefined();
-
-			reactClass._setState('nested', state);
-
-			expect(reactClass.setState).toHaveBeenCalledWith({ nested: state });
-
-		});
-
-		it('nested state render', () => {
-
-			createStateContainer('SomeComponent');
-
-			expect(React.createClass).toHaveBeenCalledTimes(1);
-
-			const reactClass = React.createClass.mock.calls[0][0];
-			reactClass.state = {
-				existing: 5,
-				nested: {
-					existing: 6,
+			const Component = React.createClass({
+				render() {
+					return (
+						<div {...this.props}></div>
+					);
 				},
-			};
-			reactClass.setState = function(state) {
-				this.state = state;
-			};
-			reactClass.createElement = jest.fn();
+			});
 
-			expect(reactClass.render).toBeDefined();
+			const BoundComponent = connectToProps(Component, actions);
 
-			const state = { myState: 4 };
+			const StateContainer = createStateContainer(BoundComponent);
 
-			reactClass._setState('nested', state);
-			reactClass.render();
+			const component = renderer.create(
+				<StateContainer onNextState={onNextState}></StateContainer>
+			);
 
-			expect(React.createElement).toHaveBeenCalledTimes(1);
-			expect(React.createElement).toHaveBeenCalledWith('SomeComponent', { existing: 5, nested: { existing: 6, ...state } });
+			expect(onNextState).toHaveBeenCalledTimes(0);
+
+			const tree = component.toJSON();
+			const props = tree.props;
+			props.changeMyState();
+
+			expect(onNextState).toHaveBeenCalledWith({
+				prop1: 'hi',
+			}, 'changeMyState');
 
 		});
 

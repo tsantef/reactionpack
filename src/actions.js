@@ -46,7 +46,7 @@ export function bindActions(_this, actions, nameSpace) {
 					return newStateMaybe.then((newState) => {
 						if (lastActionInstanceByName[name] === funcState) {
 							lastActionInstanceByName[name] = null;
-							setState(newState, key);
+							return setState(newState, key);
 						}
 						return null;
 					});
@@ -56,6 +56,8 @@ export function bindActions(_this, actions, nameSpace) {
 			};
 		} else if (_.isPlainObject(action)) {
 			return bindActions(_this, action, key);
+		} else {
+			throw new Error('Actions must be either functions or objects');
 		}
 	});
 

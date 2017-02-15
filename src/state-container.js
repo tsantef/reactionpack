@@ -24,24 +24,26 @@ export function createStateContainer(WrappedComponent) {
 		},
 
 		_setState(path, state, actionName) {
-			let newState;
-			if (!_.isUndefined(path)) {
-				newState = _.set({
-					...this.state,
-				}, path, {
-					..._.get(this.state, path),
-					...state,
-				});
-			} else {
-				newState = {
-					...this.state,
-					...state,
-				};
-			}
-			this.setState(newState);
-			if (this.props && this.props.onNextState) {
-				this.props.onNextState(newState, actionName);
-			}
+			return new Promise((resolve) => {
+				let newState;
+				if (!_.isUndefined(path)) {
+					newState = _.set({
+						...this.state,
+					}, path, {
+						..._.get(this.state, path),
+						...state,
+					});
+				} else {
+					newState = {
+						...this.state,
+						...state,
+					};
+				}
+				if (this.props && this.props.onNextState) {
+					this.props.onNextState(newState, actionName);
+				}
+				this.setState(newState, resolve);
+			});
 		},
 
 		render() {
