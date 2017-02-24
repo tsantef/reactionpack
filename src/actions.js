@@ -54,3 +54,22 @@ export function bindActions(_this, actions, nameSpace) {
 
 	return boundActions;
 }
+
+export function mockActions(actions, computeds={}) {
+	let state = {};
+	return bindActions({
+		state: {
+			__propTypeKeys: [],
+			__actionKeys: [],
+			__computedKeys: [],
+			__computed: computeds,
+		},
+		context: {
+			setState: (nameSpace, newState) => {
+				state = {...state, ...newState};
+				return Promise.resolve(state);
+			},
+			getState: () => state,
+		},
+	}, actions);
+}

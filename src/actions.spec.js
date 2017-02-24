@@ -2,7 +2,10 @@ import _ from 'lodash';
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import { bindActions } from './actions';
+import {
+	bindActions,
+	mockActions,
+} from './actions';
 import { connectToProps } from './connect';
 import { createStateContainer } from './state-container';
 
@@ -407,6 +410,57 @@ describe('Actions', () => {
 					return expect(_.omit(props, 'action1')).toEqual({ resolvedProp1: 2 });
 				});
 
+			});
+
+		});
+
+	});
+
+	describe('#mockActions', () => {
+
+		it('should mock an action', () => {
+
+			const actions = {
+				action1: jest.fn(function(state) {
+					return {
+						...state,
+						value1: 5,
+					};
+				}),
+			};
+
+			const computeds = {};
+
+			const mocked = mockActions(actions, computeds);
+			expect(mocked.action1).toBeDefined();
+
+			const result = mocked.action1();
+			expect(result.then).toBeDefined();
+
+			return result.then((value) => {
+				expect(value).toEqual({ value1: 5 });
+				return null;
+			});
+
+		});
+
+		it('should default computeds', () => {
+
+			let computeds;
+
+			const actions = {
+				action1: jest.fn(function() { computeds = this.getComputed(); }),
+			};
+
+			const mocked = mockActions(actions);
+			expect(mocked.action1).toBeDefined();
+
+			const result = mocked.action1();
+			expect(result.then).toBeDefined();
+
+			return result.then(() => {
+				expect(computeds).toEqual({});
+				return null;
 			});
 
 		});
