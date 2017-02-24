@@ -1,5 +1,8 @@
 # ReactionPack
 
+Examples
+* TodoMVC [source](https://github.com/tsantef/reactionpack/tree/master/examples/todomvc-async/src) and [demo](https://tsantef.github.io/reactionpack/examples/todomvc-async/)
+
 ## Installation
 
 ```bash
@@ -150,6 +153,8 @@ const Routes = (
 ```
 
 ## Redux DevTools Extension
+
+*NOTE: Only partially supported WIP*
 
 ReactionPack can be used with the Redux DevTools Chrome extension. To do this, forward state changes to the extension by passing in an `onNextState` handler to the state container component:
 
