@@ -1,20 +1,21 @@
 import _ from 'lodash';
 
-export function bindActions(_this, actions, nameSpace) {
+export function bindActions(_this, actions, actionNameSpace) {
 	const boundActions = _.mapValues(actions, (action, actionName) => {
 		if (_.isFunction(action)) {
 			const actionFn = action;
 			return function wrappedAction(...args) {
 				const {
+					__nameSpace,
 					__stateName,
 					__propTypeKeys,
 					__actionKeys,
 					__computedKeys,
 				} = _this.state;
-				const setState = _.partial(_this.context.setState, [nameSpace, __stateName]);
+				const setState = _.partial(_this.context.setState, [_this.context.parentName, __nameSpace, __stateName, actionNameSpace]);
 				const getState = function() {
-					const props = nameSpace ? _.get(_this.props, nameSpace) : _this.props;
-					const containerState = _this.context.getState([nameSpace, __stateName]);
+					const props = actionNameSpace ? _.get(_this.props, actionNameSpace) : _this.props;
+					const containerState = _this.context.getState([_this.context.parentName, __nameSpace, __stateName, actionNameSpace]);
 					let state = { ..._this.state.__defaults, ..._.pick(containerState, __propTypeKeys), ..._.pick(props, ...__propTypeKeys) };
 					state = _.omit(state, ...__actionKeys);
 					state = _.omit(state, ...__computedKeys);
