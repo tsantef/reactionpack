@@ -1,9 +1,7 @@
 import _ from 'lodash';
 
 export function bindActions(_this, actions, nameSpace) {
-	const lastActionInstanceByName = {};
-
-	const boundActions =  _.mapValues(actions, (action, key) => {
+	const boundActions = _.mapValues(actions, (action, actionName) => {
 		if (_.isFunction(action)) {
 			const actionFn = action;
 			return function wrappedAction(...args) {
@@ -12,18 +10,18 @@ export function bindActions(_this, actions, nameSpace) {
 					__actionKeys,
 					__computedKeys,
 				} = _this.state;
-				const funcState = { canceled: false };
 				const setState = _.partial(_this.context.setState, nameSpace);
 				const getState = function() {
 					const props = nameSpace ? _.get(_this.props, nameSpace) : _this.props;
-					let state = { ..._this.state.__defaults, ..._.pick(props, ...__propTypeKeys) };
+					const containerState = _this.context.getState();
+					let state = { ..._this.state.__defaults, ..._.pick(containerState, __propTypeKeys), ..._.pick(props, ...__propTypeKeys) };
 					state = _.omit(state, ...__actionKeys);
 					state = _.omit(state, ...__computedKeys);
 					return state;
 				};
 				const getComputed = () => _this.state.__computed;
 				const getDefaults = () => _this.state.__defaults;
-				const getActions = () => _.mapValues(boundActions, (func) => (!funcState.canceled ? func.bind(_this) : _.noop));
+				const getActions = () => _.mapValues(boundActions, (func) => func.bind(_this));
 
 				const context = {
 					getActions,
@@ -33,29 +31,22 @@ export function bindActions(_this, actions, nameSpace) {
 				};
 
 				const action = actionFn.bind(context);
+				const state = getState();
 
-				const newStateMaybe = action(getState(), ...args);
+				const newStateMaybe = action(state, ...args);
 
 				if (_.isNull(newStateMaybe) || _.isUndefined(newStateMaybe)) {
-					return null;
+					return Promise.resolve(state);
 				} else if (newStateMaybe.then) {
-					if (lastActionInstanceByName[name]) {
-						lastActionInstanceByName[name].canceled = true;
-					}
-					lastActionInstanceByName[name] = funcState;
 					return newStateMaybe.then((newState) => {
-						if (lastActionInstanceByName[name] === funcState) {
-							lastActionInstanceByName[name] = null;
-							return setState(newState, key);
-						}
-						return null;
+						return setState(newState, actionName);
 					});
 				} else {
-					return setState(newStateMaybe, key);
+					return setState(newStateMaybe, actionName);
 				}
 			};
 		} else if (_.isPlainObject(action)) {
-			return bindActions(_this, action, key);
+			return bindActions(_this, action, actionName);
 		} else {
 			throw new Error('Actions must be either functions or objects');
 		}
