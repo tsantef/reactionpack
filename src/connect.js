@@ -4,7 +4,6 @@ import React from 'react';
 import { bindActions } from './actions';
 import { buildComputeds, generateComputeds } from './computed';
 
-// TODO: Should filter out actions
 function composeState({ propTypeKeys, defaults, containerState, boundComputeds, props }) {
 	const __propKeys = _.keys(props);
 	const __stateKeys = _.without(propTypeKeys, ...__propKeys);
@@ -29,13 +28,27 @@ export function connectToProps(WrappedComponent, actions, computeds, nameSpace) 
 	const boundComputeds = buildComputeds(computeds);
 
 	return React.createClass({
+		propTypes: {
+			stateName: React.PropTypes.string,
+		},
+
+		getDefaultProps() {
+			return {
+				stateName: '',
+			};
+		},
+
 		contextTypes: {
 			getState: React.PropTypes.func,
 			setState: React.PropTypes.func,
 		},
 
 		getInitialState() {
-			const __propKeys = _.keys(this.props);
+			const {
+				stateName,
+				...props
+			} = this.props;
+			const __propKeys = _.keys(props);
 			const __propTypeKeys = _.keys(WrappedComponent.propTypes);
 			const __actionKeys = _.keys(actions);
 			const __computedKeys = _.keys(boundComputeds);
@@ -45,6 +58,7 @@ export function connectToProps(WrappedComponent, actions, computeds, nameSpace) 
 				: () => (WrappedComponent.defaultProps || {});
 
 			return {
+				__stateName: stateName,
 				__propKeys,
 				__propTypeKeys,
 				__actionKeys,
@@ -86,6 +100,7 @@ export function connectToProps(WrappedComponent, actions, computeds, nameSpace) 
 
 		render() {
 			const {
+				__stateName,
 				__propTypeKeys,
 				__stateKeys,
 				__actions,
@@ -94,7 +109,7 @@ export function connectToProps(WrappedComponent, actions, computeds, nameSpace) 
 			} = this.state;
 
 			const passThroughProps = _.pick(this.props, __propTypeKeys);
-			const stateToProps = _.pick(this.context.getState(), __stateKeys);
+			const stateToProps = _.pick(this.context.getState([nameSpace, __stateName]), __stateKeys);
 
 			// TODO: should cache the merge smartly
 			const props = {..._.merge({}, __defaults, stateToProps, __actions, __computed, passThroughProps) };

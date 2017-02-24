@@ -3,7 +3,7 @@ import { createStateContainer } from './state-container';
 jest.mock('react');
 const React = require('react');
 
-describe('State Container', () => {
+describe('State Container Old', () => {
 
 	beforeEach(function() {
 		React.createClass.mockReset();
@@ -73,7 +73,7 @@ describe('State Container', () => {
 
 			expect(reactClass._setState).toBeDefined();
 
-			reactClass._setState('nested', state);
+			reactClass._setState(['nested'], state);
 
 			expect(reactClass.setState.mock.calls[0][0]).toEqual({ nested: state });
 
@@ -101,7 +101,7 @@ describe('State Container', () => {
 
 			const state = { myState: 4 };
 
-			reactClass._setState('nested', state);
+			reactClass._setState(['nested'], state);
 			reactClass.render();
 
 			expect(React.createElement).toHaveBeenCalledTimes(1);

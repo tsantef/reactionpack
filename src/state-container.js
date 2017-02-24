@@ -19,18 +19,24 @@ export function createStateContainer(WrappedComponent) {
 			setState: React.PropTypes.func,
 		},
 
-		_getState() {
-			return this.state;
+		_getState(path) {
+			const compactPath = _.compact(path);
+			if (!_.isEmpty(compactPath)) {
+				return _.get(this.state, compactPath);
+			} else {
+				return this.state;
+			}
 		},
 
 		_setState(path, state, actionName) {
 			return new Promise((resolve) => {
 				let newState;
-				if (!_.isUndefined(path)) {
+				const compactPath = _.compact(path);
+				if (!_.isEmpty(compactPath)) {
 					newState = _.set({
 						...this.state,
-					}, path, {
-						..._.get(this.state, path),
+					}, compactPath, {
+						..._.get(this.state, compactPath),
 						...state,
 					});
 				} else {

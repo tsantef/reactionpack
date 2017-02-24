@@ -6,14 +6,15 @@ export function bindActions(_this, actions, nameSpace) {
 			const actionFn = action;
 			return function wrappedAction(...args) {
 				const {
+					__stateName,
 					__propTypeKeys,
 					__actionKeys,
 					__computedKeys,
 				} = _this.state;
-				const setState = _.partial(_this.context.setState, nameSpace);
+				const setState = _.partial(_this.context.setState, [nameSpace, __stateName]);
 				const getState = function() {
 					const props = nameSpace ? _.get(_this.props, nameSpace) : _this.props;
-					const containerState = _this.context.getState();
+					const containerState = _this.context.getState([nameSpace, __stateName]);
 					let state = { ..._this.state.__defaults, ..._.pick(containerState, __propTypeKeys), ..._.pick(props, ...__propTypeKeys) };
 					state = _.omit(state, ...__actionKeys);
 					state = _.omit(state, ...__computedKeys);
