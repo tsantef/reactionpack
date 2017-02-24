@@ -42,7 +42,9 @@ export function createStateContainer(WrappedComponent) {
 				if (this.props && this.props.onNextState) {
 					this.props.onNextState(newState, actionName);
 				}
-				this.setState(newState, resolve);
+				this.setState(newState, () => {
+					resolve(this.state);
+				});
 			});
 		},
 
