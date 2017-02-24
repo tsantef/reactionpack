@@ -40,7 +40,10 @@ export function connectToProps(WrappedComponent, actions, computeds, nameSpace) 
 			const __actionKeys = _.keys(actions);
 			const __computedKeys = _.keys(boundComputeds);
 			const __stateKeys = _.without(__propTypeKeys, ...__propKeys);
-			const getDefaultProps =  WrappedComponent.getDefaultProps;
+			const getDefaultProps = WrappedComponent.getDefaultProps
+				? WrappedComponent.getDefaultProps
+				: () => (WrappedComponent.defaultProps || {});
+
 			return {
 				__propKeys,
 				__propTypeKeys,
@@ -49,7 +52,7 @@ export function connectToProps(WrappedComponent, actions, computeds, nameSpace) 
 				__stateKeys,
 				__actions: bindActions(this, actions),
 				__computed: null,
-				__defaults: getDefaultProps ? getDefaultProps() : {},
+				__defaults: getDefaultProps(),
 			};
 		},
 
