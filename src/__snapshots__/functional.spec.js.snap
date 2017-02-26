@@ -1,10 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`Functional composed 1`] = `
 <div
   id="App"
-  onClick={[Function]}>
+  onClick={[Function]}
+>
   <div
     id="Page"
-    onClick={[Function]}>
+    onClick={[Function]}
+  >
     <span>
       vote:1
     </span>
@@ -21,10 +25,12 @@ exports[`Functional composed 1`] = `
 exports[`Functional composed 2`] = `
 <div
   id="App"
-  onClick={[Function]}>
+  onClick={[Function]}
+>
   <div
     id="Page"
-    onClick={[Function]}>
+    onClick={[Function]}
+  >
     <span>
       vote:1
     </span>
@@ -41,10 +47,12 @@ exports[`Functional composed 2`] = `
 exports[`Functional composed 3`] = `
 <div
   id="App"
-  onClick={[Function]}>
+  onClick={[Function]}
+>
   <div
     id="Page"
-    onClick={[Function]}>
+    onClick={[Function]}
+  >
     <span>
       vote:2
     </span>
@@ -61,10 +69,12 @@ exports[`Functional composed 3`] = `
 exports[`Functional composed 4`] = `
 <div
   id="App"
-  onClick={[Function]}>
+  onClick={[Function]}
+>
   <div
     id="Page"
-    onClick={[Function]}>
+    onClick={[Function]}
+  >
     <span>
       vote:2
     </span>
@@ -81,10 +91,12 @@ exports[`Functional composed 4`] = `
 exports[`Functional composed 5`] = `
 <div
   id="App"
-  onClick={[Function]}>
+  onClick={[Function]}
+>
   <div
     id="Page"
-    onClick={[Function]}>
+    onClick={[Function]}
+  >
     <span>
       vote:2
     </span>
