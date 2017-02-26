@@ -1,6 +1,18 @@
 # ReactionPack
 
-Examples
+ReactionPack offers a simple way to decouple actions and state changes from view components. With ReactionPack properly built components are stateless, use only props, and are easily unit testable.
+
+This state management package draws heavily from Redux but attempts to simplify development for small and large applications. The major difference with this library is that there are no reducers or constants to worry about. Actions return with state changes eliminating the need for constants and reducers. Additionally asynchronous actions and computed values are first class citizens with no need for external packages.
+
+#### Key Features:
+
+* Zen mode component development _(**Stateless**, simple, organized, and testable. See: [Component Development](#component-development))_
+* **No Redux** _(No constants and reducers, just actions)_
+* **No Thunk** _(Actions are natively asynchronous. See: [Actions](#actions))_
+* **No Reselect** _(Built in support for computed values. See: [Computed Values](#connected-components))_
+* Small package size
+
+#### Examples:
 * TodoMVC [source](https://github.com/tsantef/reactionpack/tree/master/examples/todomvc-async/src) and [demo](https://tsantef.github.io/reactionpack/examples/todomvc-async/)
 
 ## Installation
@@ -27,17 +39,34 @@ import { createStateContainer } from 'reactionpack';
 const AppContainer = createStateContainer(App);
 ```
 
-## Connected Components
+## Component Development
+
+### Folder Structure
+
+Components should have a folder structure like the following:
+
+```
+Component/
+├── actions.js  (Action functions get mapped to props by name)
+├── actions.spec.js
+├── computed-values.js  (Computed value definitions get mapped to props by name)
+├── computed-values.spec.js
+├── index.js  (Returns the connected component)
+├── View.jsx  (Stateless view component)
+└── View.spec.js
+```
+
+### Connecting Components
 
 `connectToProps(Component, [actions, [computed]])`
 
-### Arguments
+#### Arguments
 
 * Component
 * [actions] (object) - key names map to properties
 * [computeds] (object) - key names map to properties
 
-### Returns
+#### Returns
 
 * (Component) Returns a new component with actions and computeds bound to props.
 
@@ -83,15 +112,18 @@ actionName(state, [value, ...]) {
 
 ### Return Values
 
-Actions can return three kinds of values: A object represting the new state, a promise, or null.
+Actions can return three kinds of values: A object representing the new state, a promise, or null.
 
 * (object): Container state will be replaced with returned object.
 * Promise: Container state will be updated with the resolved object.
-* `null`: No state change
+* `null`: No state change required
 
 ### Action Context
 
-wip
+* this.getActions()
+* this.getComputed()
+* this.getDefaults()
+* this.getState()
 
 ## Computed Values
 
@@ -127,6 +159,16 @@ export const filteredTodos = [
 ];
 ```
 
+## Unit Testing
+
+### Action Helper
+
+wip
+
+### Computed Value Helper
+
+wip
+
 ## Use with React-Router
 
 ```javascript
@@ -134,7 +176,7 @@ export const filteredTodos = [
 ...
 export default connectToProps(App, actions, computed);
 
-// ./pages/home.jsx / /pages/about.jsx
+// ./pages/home.jsx && /pages/about.jsx
 export default connectToProps(Home, actions, computed);
 
 // Routes.jsx
