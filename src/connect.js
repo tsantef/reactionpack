@@ -30,34 +30,38 @@ export function connectToProps(WrappedComponent, actions, computeds, nameSpace) 
 
 	return React.createClass({
 		propTypes: {
-			stateName: React.PropTypes.string,
+			statePath: React.PropTypes.string,
 		},
 
 		getDefaultProps() {
 			return {
-				stateName: '',
+				statePath: '',
 			};
 		},
 
 		getChildContext: function() {
 			return {
-				parentName: this.state.__nameSpace || this.context.parentName,
+				parentPath: this.getStatePath(),
 			};
 		},
 
 		childContextTypes: {
-			parentName: React.PropTypes.string,
+			parentPath: React.PropTypes.array,
 		},
 
 		contextTypes: {
-			parentName: React.PropTypes.string,
+			parentPath: React.PropTypes.array,
 			getState: React.PropTypes.func,
 			setState: React.PropTypes.func,
 		},
 
+		getStatePath() {
+			return _.compact((this.context.parentPath || []).concat([nameSpace, this.props.statePath]));
+		},
+
 		getInitialState() {
 			const {
-				stateName,
+				statePath,
 				...props
 			} = this.props;
 			const __propKeys = _.keys(props);
@@ -71,7 +75,7 @@ export function connectToProps(WrappedComponent, actions, computeds, nameSpace) 
 
 			return {
 				__nameSpace: nameSpace,
-				__stateName: stateName,
+				__statePath: statePath,
 				__propKeys,
 				__propTypeKeys,
 				__actionKeys,
@@ -85,15 +89,13 @@ export function connectToProps(WrappedComponent, actions, computeds, nameSpace) 
 
 		componentWillMount() {
 			const {
-				__nameSpace,
-				__stateName,
 				__defaults,
 				__propTypeKeys,
 			} = this.state;
 			this.setState(composeState({
 				defaults: __defaults,
 				propTypeKeys: __propTypeKeys,
-				containerState: this.context.getState([this.context.parentName, __nameSpace, __stateName]),
+				containerState: this.context.getState(this.getStatePath()),
 				props: this.props,
 				boundComputeds,
 			}));
@@ -101,15 +103,13 @@ export function connectToProps(WrappedComponent, actions, computeds, nameSpace) 
 
 		componentWillReceiveProps(nextProps) {
 			const {
-				__nameSpace,
-				__stateName,
 				__defaults,
 				__propTypeKeys,
 			} = this.state;
 			this.setState(composeState({
 				defaults: __defaults,
 				propTypeKeys: __propTypeKeys,
-				containerState: this.context.getState([this.context.parentName, __nameSpace, __stateName]),
+				containerState: this.context.getState(this.getStatePath()),
 				props: nextProps,
 				boundComputeds,
 			}));
@@ -117,8 +117,6 @@ export function connectToProps(WrappedComponent, actions, computeds, nameSpace) 
 
 		render() {
 			const {
-				__nameSpace,
-				__stateName,
 				__propTypeKeys,
 				__stateKeys,
 				__actions,
@@ -127,7 +125,7 @@ export function connectToProps(WrappedComponent, actions, computeds, nameSpace) 
 			} = this.state;
 
 			const passThroughProps = _.pick(this.props, __propTypeKeys);
-			const stateToProps = _.pick(this.context.getState([this.context.parentName, __nameSpace, __stateName]), __stateKeys);
+			const stateToProps = _.pick(this.context.getState(this.getStatePath()), __stateKeys);
 			// TODO: should cache the merge smartly
 			const props = {..._.merge({}, __defaults, stateToProps, __actions, __computed, passThroughProps) };
 

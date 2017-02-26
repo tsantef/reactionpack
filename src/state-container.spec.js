@@ -71,7 +71,7 @@ describe('State Container', () => {
 
 			const App = () => {
 				return (
-					<BoundComponent stateName='name1' />
+					<BoundComponent statePath='name1' />
 				);
 			};
 

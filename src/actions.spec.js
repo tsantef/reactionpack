@@ -26,6 +26,7 @@ describe('Actions', () => {
 					__actionKeys: [],
 					__computedKeys: [],
 				},
+				getStatePath: jest.fn(() => []),
 				props: {
 					value1: 4,
 				},
@@ -40,7 +41,7 @@ describe('Actions', () => {
 			});
 			boundActions.myAction(5);
 
-			expect(_this.context.setState).toHaveBeenCalledWith([undefined, undefined, undefined, undefined], { myState: 6 }, 'myAction');
+			expect(_this.context.setState).toHaveBeenCalledWith([undefined], { myState: 6 }, 'myAction');
 
 		});
 
@@ -56,6 +57,7 @@ describe('Actions', () => {
 							__actionKeys: [],
 							__computedKeys: [],
 						},
+						getStatePath: jest.fn(() => []),
 						context: {
 							getState: jest.fn(),
 							setState: jest.fn(),
@@ -92,6 +94,7 @@ describe('Actions', () => {
 								value1: 'c1',
 							},
 						},
+						getStatePath: jest.fn(() => []),
 					};
 
 					const boundActions = bindActions(_this, {
@@ -117,6 +120,7 @@ describe('Actions', () => {
 							__actionKeys: [],
 							__computedKeys: [],
 						},
+						getStatePath: jest.fn(() => []),
 						context: {
 							getState: jest.fn(),
 							setState: jest.fn(),
@@ -154,6 +158,7 @@ describe('Actions', () => {
 							value1: 'c1',
 						},
 					},
+					getStatePath: jest.fn(() => []),
 				};
 
 				const boundActions = bindActions(_this, {
@@ -178,6 +183,7 @@ describe('Actions', () => {
 					__actionKeys: [],
 					__computedKeys: [],
 				},
+				getStatePath: jest.fn(() => []),
 				context: {
 					getState: jest.fn(),
 					setState: jest.fn(),
@@ -202,7 +208,7 @@ describe('Actions', () => {
 
 			boundActions.nest.myAction(5);
 
-			expect(_this.context.setState).toHaveBeenCalledWith([undefined, undefined, undefined, 'nest'], { myState: 6 }, 'myAction');
+			expect(_this.context.setState).toHaveBeenCalledWith(['nest'], { myState: 6 }, 'myAction');
 
 		});
 

@@ -55,7 +55,8 @@ export function createStateContainer(WrappedComponent) {
 		},
 
 		render() {
-			return React.createElement(WrappedComponent, {...this.state, ...this.props});
+			const props = _.omit(this.props, 'onNextState');
+			return React.createElement(WrappedComponent, {...this.state, ...props});
 		},
 	});
 }

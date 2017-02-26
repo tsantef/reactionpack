@@ -6,16 +6,14 @@ export function bindActions(_this, actions, actionNameSpace) {
 			const actionFn = action;
 			return function wrappedAction(...args) {
 				const {
-					__nameSpace,
-					__stateName,
 					__propTypeKeys,
 					__actionKeys,
 					__computedKeys,
 				} = _this.state;
-				const setState = _.partial(_this.context.setState, [_this.context.parentName, __nameSpace, __stateName, actionNameSpace]);
+				const setState = _.partial(_this.context.setState, _this.getStatePath().concat([actionNameSpace]));
 				const getState = function() {
 					const props = actionNameSpace ? _.get(_this.props, actionNameSpace) : _this.props;
-					const containerState = _this.context.getState([_this.context.parentName, __nameSpace, __stateName, actionNameSpace]);
+					const containerState = _this.context.getState(_this.getStatePath().concat([actionNameSpace]));
 					let state = { ..._this.state.__defaults, ..._.pick(containerState, __propTypeKeys), ..._.pick(props, ...__propTypeKeys) };
 					state = _.omit(state, ...__actionKeys);
 					state = _.omit(state, ...__computedKeys);
@@ -66,6 +64,7 @@ export function mockActions(actions, computeds={}) {
 			__computedKeys: [],
 			__computed: computeds,
 		},
+		getStatePath: jest.fn(() => []),
 		context: {
 			setState: (nameSpace, newState) => {
 				state = {...state, ...newState};
