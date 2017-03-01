@@ -9,7 +9,7 @@ This state management package draws heavily from Redux but attempts to simplify 
 * Zen mode component development _(**Stateless**, simple, organized, and testable. See: [Component Development](#component-development))_
 * **No Redux** _(No constants and reducers, just actions)_
 * **No Thunk** _(Actions are natively asynchronous. See: [Actions](#actions))_
-* **No Reselect** _(Built in support for computed values. See: [Computed Values](#connected-components))_
+* **No Reselect** _(Built in support for computed values. See: [Computed Values](#computed-values))_
 * Small package size
 
 #### Examples:
@@ -23,7 +23,7 @@ npm install reactionpack --save
 
 ## State Container
 
-`createStateContainer(Component)`
+`createStateContainer(Component, [initialState])`
 
 ### Arguments
 
@@ -31,7 +31,8 @@ npm install reactionpack --save
 
 ### Returns
 
-* (Component) Return s new component that server as the app's root state container.
+* (Component) Returns a new component that serves as the app's root state container.
+* initialState - optional state object
 
 ```javascript
 import { createStateContainer } from 'reactionpack';

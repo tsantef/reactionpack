@@ -95,4 +95,56 @@ describe('State Container', () => {
 
 	});
 
+	describe('#createStateContainer', () => {
+
+		describe('Initial State', () => {
+
+			it('should accept initial state', () => {
+
+				const initialState = {
+					notMapped: 1,
+					mappedPropFromInitialState: 2,
+					nested: {
+						mappedPropFromInitialState: 3,
+					},
+				};
+
+				const actions = {
+					changeMyState: (state) => {
+						return { prop1: 'hi' };
+					},
+				};
+
+				const Component = React.createClass({
+					propTypes: {
+						mappedToProp: React.PropTypes.string,
+						mappedPropFromInitialState: React.PropTypes.number,
+					},
+					render() {
+						return (
+							<div {...this.props}></div>
+						);
+					},
+				});
+
+				const BoundComponent = connectToProps(Component, actions);
+
+				const StateContainer = createStateContainer(BoundComponent, initialState);
+
+				const component = renderer.create(
+					<StateContainer />
+				);
+
+				const tree = component.toJSON();
+				tree.props.changeMyState = tree.props.changeMyState ? 'wrappedAction' : null;
+				expect(tree.props).toEqual({
+					changeMyState: 'wrappedAction',
+					mappedPropFromInitialState: 2,
+				});
+			});
+
+		});
+
+	});
+
 });

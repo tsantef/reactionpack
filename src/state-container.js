@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 
-export function createStateContainer(WrappedComponent) {
+export function createStateContainer(WrappedComponent, initialState={}) {
 	return React.createClass({
 		propTypes: {
 			onNextState: React.PropTypes.func,
@@ -17,6 +17,10 @@ export function createStateContainer(WrappedComponent) {
 		childContextTypes: {
 			getState: React.PropTypes.func,
 			setState: React.PropTypes.func,
+		},
+
+		getInitialState() {
+			return initialState;
 		},
 
 		_getState(path) {
