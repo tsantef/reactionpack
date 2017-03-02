@@ -1,4 +1,5 @@
-# ReactionPack
+# ReactionPack [![npm version](https://badge.fury.io/js/reactionpack.svg)](http://badge.fury.io/js/reactionpack) [![Build Status](https://travis-ci.org/tsantef/reactionpack.svg?branch=master)](https://travis-ci.org/tsantef/reactionpack) [![Coverage Status](https://coveralls.io/repos/github/tsantef/reactionpack/badge.svg?branch=master)](https://coveralls.io/github/tsantef/reactionpack?branch=master)
+
 
 ReactionPack offers a simple way to decouple actions and state changes from view components. With ReactionPack properly built components are stateless, use only props, and are easily unit testable.
 
@@ -13,7 +14,8 @@ This state management package draws heavily from Redux but attempts to simplify 
 * Small package size
 
 #### Examples:
-* TodoMVC [source](https://github.com/tsantef/reactionpack/tree/master/examples/todomvc-async/src) and [demo](https://tsantef.github.io/reactionpack/examples/todomvc-async/)
+* TodoMVC [source](https://github.com/tsantef/reactionpack/tree/master/examples/todomvc/src) and [demo](https://tsantef.github.io/reactionpack/examples/todomvc/)
+* TodoMVC Async Actions [source](https://github.com/tsantef/reactionpack/tree/master/examples/todomvc-async/src) and [demo](https://tsantef.github.io/reactionpack/examples/todomvc-async/)
 
 ## Installation
 
@@ -27,12 +29,12 @@ npm install reactionpack --save
 
 ### Arguments
 
-* Component
+* Component - The component to be used as the root state container
+* initialState - (optional) Initial state object
 
 ### Returns
 
 * (Component) Returns a new component that serves as the app's root state container.
-* initialState - optional state object
 
 ```javascript
 import { createStateContainer } from 'reactionpack';
@@ -65,16 +67,16 @@ Component/
 
 * Component
 * [actions] (object) - key names map to properties
-* [computeds] (object) - key names map to properties
+* [computed values] (object) - key names map to properties
 
 #### Returns
 
-* (Component) Returns a new component with actions and computeds bound to props.
+* (Component) Returns a new component with actions and computed values bound to props.
 
 ```javascript
 import { connectToProps } from 'reactionpack';
 
-const ConnectedPage = connectToProps(Page, actions, computeds);
+const ConnectedPage = connectToProps(Page, actions, computedValues);
 ```
 
 ### Props Override Rules
