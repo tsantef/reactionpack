@@ -2,7 +2,7 @@ export function installDevTools(onNextState, resetState, initialState) {
 	const devToolsConfig = {};
 
 	const devTools = window.__REDUX_DEVTOOLS_EXTENSION__
-		? window.__REDUX_DEVTOOLS_EXTENSION__ .connect(devToolsConfig)
+		? window.__REDUX_DEVTOOLS_EXTENSION__.connect(devToolsConfig)
 		: null;
 
 	if (devTools) {
