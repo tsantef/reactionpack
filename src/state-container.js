@@ -5,6 +5,7 @@ export function createStateContainer(WrappedComponent, initialState={}) {
 	return React.createClass({
 		propTypes: {
 			onNextState: React.PropTypes.func,
+			installDevTools: React.PropTypes.func, // Use for debugging purposes only
 		},
 
 		getChildContext() {
@@ -52,10 +53,27 @@ export function createStateContainer(WrappedComponent, initialState={}) {
 				if (this.props && this.props.onNextState) {
 					this.props.onNextState(newState, actionName);
 				}
+				if (this.onNextState) {
+					this.onNextState(newState, actionName);
+				}
 				this.setState(newState, () => {
 					resolve(this.state);
 				});
 			});
+		},
+
+		componentDidMount() {
+			if (this.props.installDevTools) {
+				this.props.installDevTools(
+					(onNextState) => {
+						this.onNextState = onNextState;
+					},
+					(resetState) => {
+						this.setState(resetState);
+					},
+					this._getState()
+				);
+			}
 		},
 
 		render() {

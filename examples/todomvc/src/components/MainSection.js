@@ -1,5 +1,5 @@
 import React from 'react';
-import { connectToProps } from '../../../../lib';
+import { connectToProps } from 'reactionpack';
 import TodoItem from './TodoItem';
 import Footer from './Footer';
 import { SHOW_ALL } from '../constants/TodoFilters';
