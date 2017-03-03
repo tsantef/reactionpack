@@ -199,19 +199,13 @@ const Routes = (
 
 ## Redux DevTools Extension
 
-*NOTE: Only partially supported WIP*
-
-ReactionPack can be used with the Redux DevTools Chrome extension. To do this, forward state changes to the extension by passing in an `onNextState` handler to the state container component:
+ReactionPack can be used with the Redux DevTools Chrome extension. To do this import and pass the `installDevTools` function to state container:
 
 ```javascript
-function onNextState(state, action) {
-  if (window.devToolsExtension) {
-    window.devToolsExtension.send({ type: action }, state);
-  }
-}
+import { installDevTools } from 'reactionpack';
 
 render(
-  <AppContainer onNextState={onNextState} />,
+  <AppContainer installDevTools={installDevTools} />,
   document.getElementById('root')
 );
 ```

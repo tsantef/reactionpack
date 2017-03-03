@@ -1,5 +1,5 @@
 import React from 'react';
-import { connectToProps } from '../../../../lib';
+import { connectToProps } from 'reactionpack';
 
 import TodoTextInput from './TodoTextInput';
 

@@ -13,7 +13,7 @@ import {
 
 import * as actions from './MainSection.actions';
 
-import { mockActions } from '../../../../lib';
+import { mockActions } from 'reactionpack';
 
 import { SHOW_ALL, SHOW_COMPLETED } from '../constants/TodoFilters';
 

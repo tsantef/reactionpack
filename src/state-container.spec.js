@@ -5,6 +5,56 @@ import { createStateContainer } from './state-container';
 
 describe('State Container', () => {
 
+	describe('#installDevTools', () => {
+
+		it('should support installDevTools', () => {
+
+			const onNextState = jest.fn();
+			let resetState;
+
+			const actions = {
+				changeMyState: (state) => {
+					return { prop1: 'hi' };
+				},
+			};
+
+			const Component = React.createClass({
+				render() {
+					return (
+						<div {...this.props}></div>
+					);
+				},
+			});
+
+			const BoundComponent = connectToProps(Component, actions);
+
+			const StateContainer = createStateContainer(BoundComponent);
+
+			const installDevTools = (registerOnNextState, registerResetState) => {
+				registerOnNextState(onNextState);
+				resetState = registerResetState;
+			};
+
+			const component = renderer.create(
+				<StateContainer installDevTools={installDevTools}></StateContainer>
+			);
+
+			expect(onNextState).toHaveBeenCalledTimes(0);
+
+			const tree = component.toJSON();
+			const props = tree.props;
+			props.changeMyState();
+
+			expect(onNextState).toHaveBeenCalledWith({
+				prop1: 'hi',
+			}, 'changeMyState');
+
+			resetState({here: 1});
+
+		});
+
+	});
+
 	describe('#onNextState', () => {
 
 		it('should call onNextState prop', () => {
