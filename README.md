@@ -25,53 +25,50 @@ npm install reactionpack --save
 
 ## State Container
 
+Every ReactionPack must have one state container component. The state container uses the components internal state to store the tree of state for nested connected components. To define the state container use the following function:
+
 `createStateContainer(Component, [initialState])`
 
 ### Arguments
 
-* Component - The component to be used as the root state container
-* initialState - (optional) Initial state object
+* Component (React Component) - the component to be used as the root state container
+* initialState (object) - (optional) Initial state tree object
 
 ### Returns
 
-* (Component) Returns a new component that serves as the app's root state container.
+* Component (React Component) - a new wrapped component that hosts the app's root state container.
+
+### Example Usage
 
 ```javascript
 import { createStateContainer } from 'reactionpack';
 
-const AppContainer = createStateContainer(App);
+const AppContainer = createStateContainer(App, { initialState });
+
+render(
+  <AppContainer />,
+  document.getElementById('root')
+);
 ```
 
 ## Component Development
 
-### Folder Structure
+### Connecting Component State to Props
 
-Components should have a folder structure like the following:
-
-```
-Component/
-├── actions.js  (Action functions get mapped to props by name)
-├── actions.spec.js
-├── computed-values.js  (Computed value definitions get mapped to props by name)
-├── computed-values.spec.js
-├── index.js  (Returns the connected component)
-├── View.jsx  (Stateless view component)
-└── View.spec.js
-```
-
-### Connecting Components
-
-`connectToProps(Component, [actions, [computed]])`
+`connectToProps(Component, [actions], [computedValues], [namespace])`
 
 #### Arguments
 
-* Component
-* [actions] (object) - key names map to properties
-* [computed values] (object) - key names map to properties
+* Component (React Component)
+* actions (object) - (optional) key names map to properties
+* computedValues (object) - (optional) key names map to properties
+* namespace (string) - (optional) the base name in state where the components state is managed
 
 #### Returns
 
-* (Component) Returns a new component with actions and computed values bound to props.
+* Component (React Component) - a new component with actions and computed values bound to props.
+
+#### Example Usage
 
 ```javascript
 import { connectToProps } from 'reactionpack';
@@ -79,9 +76,9 @@ import { connectToProps } from 'reactionpack';
 const ConnectedPage = connectToProps(Page, actions, computedValues);
 ```
 
-### Props Override Rules
+#### Props Override Rules
 
-Props are overrided in the following priority from highest to lowest.
+Props are composed in the following priority order from highest to lowest.
 
 * prop passed in from owner component
 * computed value from bound computed function
@@ -89,7 +86,7 @@ Props are overrided in the following priority from highest to lowest.
 * state value from state container (if defined in propTypes)
 * component default props
 
-## Actions
+### Actions
 
 Actions are async out of the gate and can return with state changes or a promises.
 
@@ -113,7 +110,7 @@ actionName(state, [value, ...]) {
 }
 ```
 
-### Return Values
+#### Return Values
 
 Actions can return three kinds of values: A object representing the new state, a promise, or null.
 
@@ -121,14 +118,16 @@ Actions can return three kinds of values: A object representing the new state, a
 * Promise: Container state will be updated with the resolved object.
 * `null`: No state change required
 
-### Action Context
+#### Action Context
+
+wip description
 
 * this.getActions()
 * this.getComputed()
 * this.getDefaults()
 * this.getState()
 
-## Computed Values
+### Computed Values
 
 ReactionPack has computed value support built in. Inspired by [Reselect](https://github.com/reactjs/reselect), computed values can be defined using an array containing one or more value selector functions and a computation function.
 
@@ -140,7 +139,7 @@ export const computedDef = [
 ]
 ```
 
-### Example Usage
+#### Example Usage
 
 (Excerpt taken from the [todomvc example app](https://github.com/tsantef/reactionpack/blob/master/examples/todomvc/src/components/MainSection.computed.js))
 
@@ -160,6 +159,21 @@ export const filteredTodos = [
   getFilter,
   (todos, filter) => _.filter(todos, TODO_FILTERS[filter]),
 ];
+```
+
+### Component Folder Structure
+
+The recommend folder structure for components looks like the following:
+
+```
+Component/
+├── actions.js  (Action functions get mapped to props by name)
+├── actions.spec.js
+├── computed-values.js  (Computed value definitions get mapped to props by name)
+├── computed-values.spec.js
+├── index.js  (Returns the connected component)
+├── View.jsx  (Stateless view component)
+└── View.spec.js
 ```
 
 ## Unit Testing
