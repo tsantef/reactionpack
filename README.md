@@ -88,10 +88,10 @@ Props are composed in the following priority order from highest to lowest.
 
 ### Actions
 
-Actions are async out of the gate and can return with state changes or a promises.
+Actions are either synchronous returning an object or null, or asynchronous returning a promise. Actions that call other actions should call them via `getActions` and not directly. Example: `this.getActions().someAction()`.
 
 ```javascript
-// Return state changes
+// Returns a state changes
 actionName(state, [value, ...]) {
   return {
     ...state
@@ -99,7 +99,7 @@ actionName(state, [value, ...]) {
   }
 }
 
-// Return promises
+// Returns a promise
 actionName(state, [value, ...]) {
   return fetchApiStuff(value).then((res) => {
     return {
@@ -108,11 +108,17 @@ actionName(state, [value, ...]) {
     }
   })
 }
+
+// Returns the result of another action
+actionName(state, [value, ...]) {
+  ...
+  return this.getActions().anotherAction(value);
+}
 ```
 
 #### Return Values
 
-Actions can return three kinds of values: A object representing the new state, a promise, or null.
+Actions should return one of three types of values: An object representing the new state, a promise, or null.
 
 * (object): Container state will be replaced with returned object.
 * Promise: Container state will be updated with the resolved object.
@@ -120,7 +126,7 @@ Actions can return three kinds of values: A object representing the new state, a
 
 #### Action Context
 
-wip description
+Actions are bound with functions in context for accessing other actions, computed values, default values, and the current state.
 
 * this.getActions()
 * this.getComputed()
@@ -178,13 +184,89 @@ Component/
 
 ## Unit Testing
 
-### Action Helper
+### Actions
 
-wip
+#### Synchronous actions
 
-### Computed Value Helper
+When testing synchronous actions (those that do not return a promise) simply call the action function directly.
 
-wip
+```javascript
+const todo = {
+  id: 1,
+  completed: false,
+  text: 'Some todo',
+  editText: null,
+  editing: false,
+};
+
+const state = {
+  todosById: {
+    1: todo,
+  },
+};
+
+const result = onBeginEdit(state, todo);
+
+expect(result).toEqual({
+  todosById: {
+    1: {
+      id: 1,
+      completed: false,
+      text: 'Some todo',
+      editText: 'Some todo',
+      editing: true,
+    },
+  },
+});
+```
+
+#### Asynchronous actions
+
+When testing asynchronous actions use the `mockActions` helper. The helper binds all actions as a unit and then test individual actions as methods on the returned object. Mock out other actions on this object as needed.
+
+`mockActions(actions)`
+
+```javascript
+import { mockActions } from 'reactionpack';
+...
+const todo = {
+  id: 1,
+  completed: false,
+  text: 'Some todo',
+  editing: false,
+};
+
+const mockedActions = mockActions(actions);
+
+mockedActions.saveTodo = jest.fn(() => Promise.resolve({})); // Mock out action called by `onSaveTodo`
+
+return mockedActions.onSaveTodo(todo).then((result) => {
+  return expect(mockedActions.saveTodo).toBeCalledWith(todo);
+});
+
+```
+
+### Computed Values
+
+When testing computed value definitions use the `createComputed` helper to build a the compute function.
+
+`createComputed(computedValueDefintion)`
+
+```javascript
+const state = {
+  todos: [{
+    id: 1,
+    completed: false,
+  }, {
+    id: 2,
+    completed: true,
+  }],
+};
+
+const computeCompletedCount = createComputed(completedCount);
+
+expect(computeCompletedCount(state)).toEqual(1);
+```
 
 ## Use with React-Router
 
@@ -223,3 +305,16 @@ render(
   document.getElementById('root')
 );
 ```
+
+TODOS:
+
+document onNextState
+_setState should not setstate if state did not change
+add trouble shooting section
+only call selectors once if shared between values
+Promise.all returning an array could be ignored
+migration guide from redux
+recommend react/prop-types: 1
+Show how state maps to props
+Have a story for async actions
+Accessing computed values and Actions from an action

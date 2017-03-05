@@ -64,6 +64,7 @@ export function createStateContainer(WrappedComponent, initialState={}) {
 
 		componentDidMount() {
 			if (this.props.installDevTools) {
+				// Call installDevTools with callback to reset state (development purposes only)
 				this.props.installDevTools(
 					(onNextState) => {
 						this.onNextState = onNextState;
