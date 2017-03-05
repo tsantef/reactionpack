@@ -1,0 +1,30 @@
+{
+  "name": "component-library-reactionpack",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Tim Santeford <tsantef@gmail.com>",
+  "homepage": "https://tsantef.github.io/reactionpack/examples/component-library",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject",
+    "test": "react-scripts test",
+    "deploy:clean": "rm -rf ../../docs/examples/component-library",
+    "deploy:mv": "mv build ../../docs/examples/component-library",
+    "deploy": "npm run build && npm run deploy:clean && npm run deploy:mv"
+  },
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "classnames": "^2.2.5",
+    "lodash": "^4.17.4",
+    "numeral": "^2.0.4",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "reactionpack": "^0.1.0"
+  },
+  "devDependencies": {
+    "react-scripts": "^0.8.5"
+  }
+}
