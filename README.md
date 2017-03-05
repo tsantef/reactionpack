@@ -305,16 +305,3 @@ render(
   document.getElementById('root')
 );
 ```
-
-TODOS:
-
-document onNextState
-_setState should not setstate if state did not change
-add trouble shooting section
-only call selectors once if shared between values
-Promise.all returning an array could be ignored
-migration guide from redux
-recommend react/prop-types: 1
-Show how state maps to props
-Have a story for async actions
-Accessing computed values and Actions from an action
