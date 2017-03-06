@@ -268,6 +268,12 @@ const computeCompletedCount = createComputed(completedCount);
 expect(computeCompletedCount(state)).toEqual(1);
 ```
 
+## Troubleshooting QAs
+
+### Why are my actions or computed values in not being passed in as props?
+
+Make sure all action and computed value names are defined in the component's propTypes. If not they will be ignored by the connected component.
+
 ## Use with React-Router
 
 ```javascript
