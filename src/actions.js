@@ -4,23 +4,35 @@ export function bindActions(_this, actions, actionNameSpace) {
 	const boundActions = _.mapValues(actions, (action, actionName) => {
 		if (_.isFunction(action)) {
 			const actionFn = action;
+			const statePath = _this.getStatePath(actionNameSpace);
 			return function wrappedAction(...args) {
 				const {
 					__propTypeKeys,
 					__actionKeys,
 					__computedKeys,
 				} = _this.state;
+
 				const setState = _.partial(_this.context.setState, _this.getStatePath().concat([actionNameSpace]));
+
+				const getDefaults = () => {
+					return !_.isEmpty(statePath) ? _.get(_this.state.__defaults, statePath) : _this.state.__defaults;
+				};
+
 				const getState = function() {
 					const props = actionNameSpace ? _.get(_this.props, actionNameSpace) : _this.props;
-					const containerState = _this.context.getState(_this.getStatePath().concat([actionNameSpace]));
-					let state = { ..._this.state.__defaults, ..._.pick(containerState, __propTypeKeys), ..._.pick(props, ...__propTypeKeys) };
+					const containerState = _this.context.getState(statePath);
+					const defaults = getDefaults();
+					let state = {
+						...defaults,
+						...containerState,
+						..._.pick(props, ...__propTypeKeys),
+					};
 					state = _.omit(state, ...__actionKeys);
 					state = _.omit(state, ...__computedKeys);
 					return state;
 				};
+
 				const getComputed = () => _this.state.__computed;
-				const getDefaults = () => _this.state.__defaults;
 				const getActions = () => _.mapValues(boundActions, (func) => func.bind(_this));
 
 				const context = {

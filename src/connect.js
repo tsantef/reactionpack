@@ -55,8 +55,8 @@ export function connectToProps(WrappedComponent, actions, computeds, nameSpace) 
 			setState: React.PropTypes.func,
 		},
 
-		getStatePath() {
-			return _.compact((this.context.parentPath || []).concat([nameSpace, this.props.statePath]));
+		getStatePath(addtionalPath) {
+			return _.compact((this.context.parentPath || []).concat([nameSpace, this.props.statePath]).concat(addtionalPath));
 		},
 
 		getInitialState() {
