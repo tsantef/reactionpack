@@ -272,7 +272,7 @@ expect(computeCompletedCount(state)).toEqual(1);
 
 ### Why are my actions or computed values in not being passed in as props?
 
-Make sure all action and computed value names are defined in the component's propTypes. If not they will be ignored by the connected component.
+Make sure all action and computed value names are defined in the component's propTypes. If not they will be ignored by the connected component. Added the following eslint rule to help prevent this problem going forward: `react/prop-types: 1`
 
 ## Use with React-Router
 

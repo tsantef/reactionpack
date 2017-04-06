@@ -8,6 +8,12 @@ export function createStateContainer(WrappedComponent, initialState={}) {
 			installDevTools: React.PropTypes.func, // Use for debugging purposes only
 		},
 
+		// getInitialState() {
+		// 	return {
+		// 		stateVersion: 0,
+		// 	};
+		// },
+
 		getChildContext() {
 			return {
 				getState: this._getState,
@@ -43,11 +49,13 @@ export function createStateContainer(WrappedComponent, initialState={}) {
 					}, compactPath, {
 						..._.get(this.state, compactPath),
 						...state,
+						// stateVersion: state.stateVersion + 1,
 					});
 				} else {
 					newState = {
 						...this.state,
 						...state,
+						// stateVersion: this.state.stateVersion + 1,
 					};
 				}
 				if (this.props && this.props.onNextState) {
